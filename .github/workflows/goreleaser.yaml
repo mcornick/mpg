@@ -18,7 +18,7 @@ jobs:
           go-version: ">=1.19.5"
       - uses: sigstore/cosign-installer@c3667d99424e7e6047999fb6246c0da843953c65 # main
         with:
-          cosign-release: v1.13.1
+          cosign-release: v2.0.0
       - uses: anchore/sbom-action/download-syft@f65c4834e1593b609f21ba7f2f3f5af6136c33dc # main
         with:
           syft-version: v0.69.0
@@ -58,13 +58,9 @@ jobs:
         shell: bash
       - run: echo "full_ref_docker=$(crane digest mcornick/clilol:latest --full-ref)" >> $GITHUB_ENV
         shell: bash
-      - env:
-          COSIGN_EXPERIMENTAL: 1
-        run: cosign sign $full_ref_ghcr
+      - run: cosign sign --yes $full_ref_ghcr
         shell: bash
-      - env:
-          COSIGN_EXPERIMENTAL: 1
-        run: cosign sign $full_ref_docker
+      - run: cosign sign --yes $full_ref_docker
         shell: bash
       - run: rm /home/runner/gpgkey.asc
         shell: bash
